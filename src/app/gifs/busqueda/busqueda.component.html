@@ -2,7 +2,13 @@
 
     <div class="col">
         <h3>Buscar</h3>
-        <input type="text" class="form-control" placeholder="Buscar Gifs...">
+        <input 
+        type="text"
+        class="form-control"
+        placeholder="Buscar Gifs..."
+        (keyup.enter)="buscar(txtBuscar.value)"
+        #txtBuscar
+        >
     </div>
 
 </div>
