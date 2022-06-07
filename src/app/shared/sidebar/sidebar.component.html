@@ -5,7 +5,13 @@
     <hr class="text-white">
 
       <div class="list-group list-reset">
-        <a href="#" class="list-group-item list-group-item-action text-center">Dashboard</a>
+        <!-- recorrer con un ngfor el historial que traigo del component.ts  -->
+        <a *ngFor="let item of historial"
+            href="#" 
+            class="list-group-item list-group-item-action text-center">
+        <!-- imprimir el item  y el pipe que mantiene el formato de mayusculas y minusculas -->    
+            {{item | titlecase}}
+        </a>
       </div>
 
   </div>

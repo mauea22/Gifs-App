@@ -1,5 +1,7 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 
+import { GifsService } from '../services/gifs.service';
+
 @Component({
   selector: 'app-busqueda',
   templateUrl: './busqueda.component.html',
@@ -9,11 +11,22 @@ export class BusquedaComponent  {
 //el @ViewChild busca una referencia en el html (en este caso el #txtBuscar) y lo asigna a txtBuscar de tipo any
   @ViewChild('txtBuscar') txtBuscar!:ElementRef<HTMLInputElement>;
 
-  buscar( termino:string){
+  //inyecta el service
+  constructor( private gifsService: GifsService){}
+
+
+  buscar( ){
     //asigno el valor a una variable
     const valor = this.txtBuscar.nativeElement.value;
 
-    console.log(this.txtBuscar);
+    //controlar el ingreso del input en vacio o solo con espacios
+    if (valor.trim().length === 0) {
+      return;
+    }
+
+    //inserto desde el metodo buscar en el service el valor
+    this.gifsService.buscarGifs( valor );
+
     //limpio el formulario 
     this.txtBuscar.nativeElement.value = "";
   }
