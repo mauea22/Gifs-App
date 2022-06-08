@@ -21,7 +21,15 @@ export class GifsService {
   }
 
   //constructor para hacer consultas Http (importar HttpClient desde '@angular/common/http')
-  constructor(private http: HttpClient){}
+  constructor(private http: HttpClient){
+    //cargar desde localStorage, se hace desde el constructor porque este se ejecuta la primera y unica vez que el servicio sea llamado
+    //si existe la key historial ???
+    if(localStorage.getItem('historial')){
+      //guardar en GifsService._historial el arreglo hitorial parseado a un objeto
+      this._historial = JSON.parse(localStorage.getItem('historial')!);
+    }
+
+  }
 
   //metodo que captura la entrada del input
   buscarGifs( query:string){
@@ -35,16 +43,19 @@ export class GifsService {
 
       //cortar el array _historial donde los elementos no se acumulan mas de 10
       this._historial = this._historial.splice(0,10);
+
+      //grabar en el localStorage
+      localStorage.setItem('historial', JSON.stringify(this._historial));
     }
 
     //hacer la consulta a la API con el service httpClient entre backstick
     //SearchGifsResponse es la interface creada con https://app.quicktype.io/ de la respuesta JSON
     this.http.get<SearchGifsResponse>(`http://api.giphy.com/v1/gifs/search?api_key=3RORMcKUgVguSvlh0q8tfl0OLH6CHjg8&q=${ query }&limit=10`).subscribe( (resp: any) => {
       console.log(resp.data);
-      //almaceno en resultados la data de la respuesta a la peticion 
+      //almaceno en resultados la data de la respuesta a la peticion
       this.resultados = resp.data;
     });
 
   }
-  
+
 }
