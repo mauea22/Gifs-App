@@ -11,6 +11,9 @@ export class GifsService {
   //propiedad privada que almacena los string (que vienen del input) en un array
   private _historial:string[] = [];
 
+  //TODO: cambiar el tipo
+  public resultados: any[] = [];
+
   //getter del array
   public get historial() {
     return [...this._historial];
@@ -32,10 +35,12 @@ export class GifsService {
       //cortar el array _historial donde los elementos no se acumulan mas de 10
       this._historial = this._historial.splice(0,10);
     }
-    
-    //hacer la consulta a la API con el service httpClient 
-    this.http.get('http://api.giphy.com/v1/gifs/search?api_key=3RORMcKUgVguSvlh0q8tfl0OLH6CHjg8&q=dragon ball z&limit=10').subscribe( (resp: any) => {
+
+    //hacer la consulta a la API con el service httpClient entre backstick
+    this.http.get(`http://api.giphy.com/v1/gifs/search?api_key=3RORMcKUgVguSvlh0q8tfl0OLH6CHjg8&q=${ query }&limit=10`).subscribe( (resp: any) => {
       console.log(resp.data);
+      //almaceno en resultados la data de la respuesta a la peticion 
+      this.resultados = resp.data;
     });
 
   }
