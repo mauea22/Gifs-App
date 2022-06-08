@@ -28,7 +28,9 @@ export class GifsService {
       //guardar en GifsService._historial el arreglo hitorial parseado a un objeto
       this._historial = JSON.parse(localStorage.getItem('historial')!);
     }
-
+    if(localStorage.getItem('resultadosImg')){
+      this.resultados = JSON.parse(localStorage.getItem('resultadosImg')!);
+    }
   }
 
   //metodo que captura la entrada del input
@@ -46,6 +48,7 @@ export class GifsService {
 
       //grabar en el localStorage
       localStorage.setItem('historial', JSON.stringify(this._historial));
+
     }
 
     //hacer la consulta a la API con el service httpClient entre backstick
@@ -54,6 +57,9 @@ export class GifsService {
       console.log(resp.data);
       //almaceno en resultados la data de la respuesta a la peticion
       this.resultados = resp.data;
+
+      //obtener las imagenes en localStorage despues de tener la respuesta
+      localStorage.setItem('resultadosImg', JSON.stringify(this.resultados));
     });
 
   }
