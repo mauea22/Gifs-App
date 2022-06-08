@@ -7,9 +7,10 @@
       <div class="list-group list-reset">
         <!-- recorrer con un ngfor el historial que traigo del component.ts  -->
         <a *ngFor="let item of historial"
-            href="#" 
+            (click)="buscar(item)"
+            href="#"
             class="list-group-item list-group-item-action text-center">
-        <!-- imprimir el item  y el pipe titlecase capitaliza en el template o sea mantiene el formato de mayusculas y minusculas -->    
+        <!-- imprimir el item  y el pipe titlecase capitaliza en el template o sea mantiene el formato de mayusculas y minusculas -->
             {{item | titlecase}}
         </a>
       </div>
