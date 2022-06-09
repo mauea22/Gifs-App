@@ -19,12 +19,12 @@ export class BusquedaComponent  {
     //asigno el valor a una variable
     const valor = this.txtBuscar.nativeElement.value;
 
-    //controlar el ingreso del input en vacio o solo con espacios
+    //controlar el ingreso del input en vacío o solo con espacios
     if (valor.trim().length === 0) {
       return;
     }
 
-    //inserto desde el metodo buscar en el service el valor
+    //inserto desde el método buscar en el service el valor
     this.gifsService.buscarGifs( valor );
 
     //limpio el formulario 

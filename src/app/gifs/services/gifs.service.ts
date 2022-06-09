@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Gif, SearchGifsResponse } from '../interfaces/gifs.interface';
 
 @Injectable({
@@ -8,6 +8,7 @@ import { Gif, SearchGifsResponse } from '../interfaces/gifs.interface';
 export class GifsService {
 
   private apiKey: string = '3RORMcKUgVguSvlh0q8tfl0OLH6CHjg8'
+  private servicioUrl: string = 'http://api.giphy.com/v1/gifs'
 
   //propiedad privada que almacena los string (que vienen del input) en un array
   private _historial:string[] = [];
@@ -22,10 +23,10 @@ export class GifsService {
 
   //constructor para hacer consultas Http (importar HttpClient desde '@angular/common/http')
   constructor(private http: HttpClient){
-    //cargar desde localStorage, se hace desde el constructor porque este se ejecuta la primera y unica vez que el servicio sea llamado
+    //cargar desde localStorage, se hace desde el constructor porque este se ejecuta la primera y única vez que el servicio sea llamado
     //si existe la key historial ???
     if(localStorage.getItem('historial')){
-      //guardar en GifsService._historial el arreglo hitorial parseado a un objeto
+      //guardar en GifsService._historial el arreglo historial parseado a un objeto
       this._historial = JSON.parse(localStorage.getItem('historial')!);
     }
     if(localStorage.getItem('resultadosImg')){
@@ -33,9 +34,9 @@ export class GifsService {
     }
   }
 
-  //metodo que captura la entrada del input
+  //método que captura la entrada del input
   buscarGifs( query:string){
-    //que el dato ingresado no tenga espacios adelante ni atras trim() y que se convierta a minusculas para que luego no se repitan en mayusculas y minusculas toLowerCase()
+    //que el dato ingresado no tenga espacios adelante ni atrás trim() y que se convierta a minúsculas para que luego no se repitan en mayúsculas y minúsculas toLowerCase()
     query = query.trim().toLowerCase();
 
     //no tener repetidos en el array (si no existe en el array que haga el unshift)
@@ -51,14 +52,21 @@ export class GifsService {
 
     }
 
-    //hacer la consulta a la API con el service httpClient entre backstick
+    //parámetros de la url 
+    const params = new HttpParams()
+      .set('api_key', this.apiKey)
+      .set('limit','10')
+      .set('q', query);
+
+    //hacer la consulta a la API con el service httpClient entre backtick
     //SearchGifsResponse es la interface creada con https://app.quicktype.io/ de la respuesta JSON
-    this.http.get<SearchGifsResponse>(`http://api.giphy.com/v1/gifs/search?api_key=3RORMcKUgVguSvlh0q8tfl0OLH6CHjg8&q=${ query }&limit=10`).subscribe( (resp: any) => {
-      console.log(resp.data);
-      //almaceno en resultados la data de la respuesta a la peticion
+
+    this.http.get<SearchGifsResponse>(`${this.servicioUrl}/search`,{params}).subscribe( (resp: any) => {
+
+      //almaceno en resultados la data de la respuesta a la petición
       this.resultados = resp.data;
 
-      //obtener las imagenes en localStorage despues de tener la respuesta
+      //obtener las imágenes en localStorage después de tener la respuesta
       localStorage.setItem('resultadosImg', JSON.stringify(this.resultados));
     });
 
